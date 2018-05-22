@@ -14,6 +14,11 @@ Behaviour models are codified using Locust, an open-source load testing tool tha
 
 This system works by searching all `.py` files in the `tasksets` directory and subdirectories for subclasses of `TaskSet` and adding these to a `MysticTaskset`, which packages all the tasks with their desired weights into a `HTTPLocust` class. Note: Python 2 does not have support for recursive subdirectories, so only searchs 1 directory deep `tasksets/*/`
 
+To run project mystic, simply use mystic.py as your locustfile:
+```bash
+locust -f mystic.py --host=https://www.example.com ...
+```
+
 An example structure for one of these TaskSets is:
 ```python
 from locust import TaskSet, task
