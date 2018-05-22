@@ -1,5 +1,5 @@
 # Project mystic
-Import tasksets from a 'tasksets/' folder into a common class.
+Import tasksets from a 'tasksets/' folder into a common class and run Locust using that class.
 
 ## Directory structure
 
