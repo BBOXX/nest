@@ -115,7 +115,7 @@ def collect_tasksets(dir_path='tasksets/', config_file='config.json'):
     tasksets = load_taskset_dir(dir_path)
     if not tasksets:
         return {}
-    mystictasks = {}
+    nest_tasks = {}
     weights = config.get('models', None)
     for key, callee in tasksets.items():
         try:
@@ -132,11 +132,11 @@ def collect_tasksets(dir_path='tasksets/', config_file='config.json'):
             self.interrupt()
         if weight:
             callee.tasks.append(stop)
-            mystictasks[callee] = weight
-    logger.info("Found following tasksets and weights: {}".format(mystictasks))
-    return mystictasks
+            nest_tasks[callee] = weight
+    logger.info("Found following tasksets and weights: {}".format(nest_tasks))
+    return nest_tasks
 
-class MysticTaskSet(TaskSet):
+class NestTaskSet(TaskSet):
     """TaskSet containing all the sub-tasksets contained in the specified directory.
     
     Arguments:
@@ -145,11 +145,11 @@ class MysticTaskSet(TaskSet):
     """
     tasks = collect_tasksets(dir_path='tasksets/')
 
-class MysticLocust(HttpLocust):
-    """HttpLocust using the MysticTaskSet.
+class NestLocust(HttpLocust):
+    """HttpLocust using the NestTaskSet.
     
     Arguments:
         HttpLocust {class} -- HttpLocust from Locust.
 
     """
-    task_set = MysticTaskSet
+    task_set = NestTaskSet
