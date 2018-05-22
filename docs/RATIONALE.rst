@@ -1,13 +1,13 @@
-Aims of Mystic
+Aims of Nest
 ==============
 Predict future scalability requirements and cost per customer.
 
-Mystic Prouduct Management 
+Nest Prouduct Management 
 --------------------------
 
-The information gained from Mystic is incredibly useful for proactive product management, helping to guide long-term architectural decisions and avoid a false economy of technical debt due to decisions guided by a lack of knowledge about the future strains on the system. On a day-to-day basis this could be used to prevent unscalable code changes from being deployed into production either to be immediately reverted due to the lack of a full-load simulation, or several months later when usage has grown. 
+The information gained from Nest is incredibly useful for proactive product management, helping to guide long-term architectural decisions and avoid a false economy of technical debt due to decisions guided by a lack of knowledge about the future strains on the system. On a day-to-day basis this could be used to prevent unscalable code changes from being deployed into production either to be immediately reverted due to the lack of a full-load simulation, or several months later when usage has grown. 
 
-As a Mystic product manager, you will have a crystal ball into the future burdens on your system and be able to plan proactively.
+As a Nest product manager, you will have a crystal ball into the future burdens on your system and be able to plan proactively.
 
 Justify long-term decisions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,4 +1,4 @@
-from mystic import load_taskset_dir
+from nest import load_taskset_dir
 import json
 import sys
 import os
@@ -57,13 +57,13 @@ def retry_valid_input(prompt, title = '', default = None, condition=lambda x: x 
     return transform(user_input)
 
 def make_config(dir_path = None, **kwargs):
-    """Guide a user through making a config file for Mystic.
+    """Guide a user through making a config file for Nest.
     
     Keyword Arguments:
         dir_path {str (path)} -- Folder in which the user's TaskSets reside. (default: {None})
     
     Returns:
-        dict -- Mystic config file.
+        dict -- Nest config file.
 
     """
 

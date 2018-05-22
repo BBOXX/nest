@@ -1,4 +1,4 @@
-# Project mystic
+# Project nest
 Import tasksets from a 'tasksets/' folder into a common class and run Locust using that class.
 
 ## Directory structure
@@ -8,15 +8,15 @@ Import tasksets from a 'tasksets/' folder into a common class and run Locust usi
 
 ## How to use
 
-Project Mystic is designed to provide a framework for simulating a specified load on a system.
+Project Nest is designed to provide a framework for simulating a specified load on a system.
 
 Behaviour models are codified using Locust, an open-source load testing tool that allows abitrarily complex user behaviour modelling since all tasks are written in Python. 
 
-This system works by searching all `.py` files in the `tasksets` directory and subdirectories for subclasses of `TaskSet` and adding these to a `MysticTaskset`, which packages all the tasks with their desired weights into a `HTTPLocust` class. Note: Python 2 does not have support for recursive subdirectories, so only searchs 1 directory deep `tasksets/*/`
+This system works by searching all `.py` files in the `tasksets` directory and subdirectories for subclasses of `TaskSet` and adding these to a `NestTaskset`, which packages all the tasks with their desired weights into a `HTTPLocust` class. Note: Python 2 does not have support for recursive subdirectories, so only searchs 1 directory deep `tasksets/*/`
 
-To run project mystic, simply use mystic.py as your locustfile:
+To run project nest, simply use nest.py as your locustfile:
 ```bash
-locust -f mystic.py --host=https://www.example.com ...
+locust -f nest.py --host=https://www.example.com ...
 ```
 
 To be guided through the generation of a config file, run:
@@ -59,7 +59,7 @@ Separate program: config.py: ask user for each taskset the different weightings 
 
 ## Workflow
 
-1. Mystic will import all TaskSets from `tasksets/`
+1. Nest will import all TaskSets from `tasksets/`
 2. Run any dependencies e.g. flask webserver for shared data between Locusts.
 3. Using the values in the config file (or 'Get config from sub-tasksets' setting), assign the various weights.
 4. Display weightings that will be used with confirmation prompt (skippable with some commandline argument).

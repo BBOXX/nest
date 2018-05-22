@@ -1,7 +1,7 @@
 Quick start
 ===========
 
-Install Mystic
+Install Nest
 --------------
 
 See :ref:`installation-label`.

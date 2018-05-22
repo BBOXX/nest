@@ -1,7 +1,7 @@
-mystic.py
+nest.py
 =============
 
-.. automodule:: mystic
+.. automodule:: nest
     :members:
     :undoc-members:
     :show-inheritance:
