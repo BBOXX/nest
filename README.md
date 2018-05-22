@@ -45,7 +45,7 @@ class ModelBehaviour(TaskSet):
 
 # Configure.py
 
-Separate program: config.py: ask user for each taskset the different weightings to use, and ask if you'd like to save these to a config file (with a file name.
+Separate program: config.py: ask user for each taskset the different weightings to use, and ask if you'd like to save these to a config file.
 
 ## Workflow
 
