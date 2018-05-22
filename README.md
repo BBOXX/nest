@@ -19,6 +19,11 @@ To run project mystic, simply use mystic.py as your locustfile:
 locust -f mystic.py --host=https://www.example.com ...
 ```
 
+To be guided through the generation of a config file, run:
+```bash
+python configure.py
+```
+
 An example structure for one of these TaskSets is:
 ```python
 from locust import TaskSet, task
