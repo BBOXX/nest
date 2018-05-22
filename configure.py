@@ -97,8 +97,8 @@ def make_config(dir_path = None, **kwargs):
         total += quantity
         # for task in callee.tasks:
             # logger.debug(task.func_name)
-    logger.info('Quantities: {}'.format(quantities))
-    logger.info('Total: {}'.format(total))
+    # logger.info('Quantities: {}'.format(quantities))
+    # logger.info('Total: {}'.format(total))
     config = {
         'models':quantities, 
         'total':total
