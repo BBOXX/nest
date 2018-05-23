@@ -1,4 +1,4 @@
-from locust import TaskSet, task
+from locust import TaskSet, task, HttpLocust
 
 class Model(TaskSet):
     weight = 0
@@ -27,3 +27,6 @@ class Model(TaskSet):
         """
         
         return
+
+class ModelLocust(HttpLocust):
+    task_set = Model
