@@ -25,8 +25,10 @@ class Model(TaskSet):
         e.g. registering a customer
 
         """
+        self.client.get("/")
         
         return
 
 class ModelLocust(HttpLocust):
+    host = "http://127.0.0.1:8089"
     task_set = Model
