@@ -20,9 +20,9 @@ with open(_init_file, 'rb') as f:
         f.read().decode('utf-8')).group(1)))
 
 # Package meta-data.
-NAME = 'nest'
+NAME = 'locust-nest'
 DESCRIPTION = 'Auto-import and compilation of locust TaskSets.'
-URL = 'https://github.com/ps-george/nest'
+URL = 'https://github.com/ps-george/locust-nest'
 EMAIL = 'puntersg@gmail.com'
 AUTHOR = 'George Punter'
 REQUIRES_PYTHON = '>=3.6.0'
@@ -97,11 +97,12 @@ setup(
     version=about['__version__'],
     description=DESCRIPTION,
     long_description=long_description,
-    long_description_content_type='text/markdown'
+    long_description_content_type='text/markdown',
     author=AUTHOR,
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
+    download_url='{}/archive/{version}.tar.gz'.format(URL,version),
     packages=find_packages(exclude=('tests',)),
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
