@@ -4,6 +4,7 @@
 # Note: To use the 'upload' functionality of this file, you must:
 #   $ pip install twine
 
+import ast
 import io
 import os
 import sys
@@ -14,7 +15,10 @@ from setuptools import find_packages, setup, Command
 
 # parse version from locust/__init__.py
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
-_init_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), "nest", "__init__.py")
+_init_file = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        "nest",
+        "__init__.py")
 with open(_init_file, 'rb') as f:
     version = str(ast.literal_eval(_version_re.search(
         f.read().decode('utf-8')).group(1)))
@@ -30,13 +34,8 @@ VERSION = version
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    locustio
+    'locustio'
 ]
-
-# The rest you shouldn't have to touch too much :)
-# ------------------------------------------------
-# Except, perhaps the License and Trove Classifiers!
-# If you do change the License, remember to change the Trove Classifier for that!
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -79,7 +78,9 @@ class UploadCommand(Command):
             pass
 
         self.status('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
+        os.system(
+            '{0} setup.py sdist bdist_wheel --universal'.format(sys.executable)
+        )
 
         self.status('Uploading the package to PyPi via Twine…')
         os.system('twine upload dist/*')
@@ -87,7 +88,6 @@ class UploadCommand(Command):
         self.status('Pushing git tags…')
         os.system('git tag v{0}'.format(about['__version__']))
         os.system('git push --tags')
-        
         sys.exit()
 
 
@@ -102,7 +102,7 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    download_url='{}/archive/{version}.tar.gz'.format(URL,version),
+    download_url='{}/archive/{version}.tar.gz'.format(URL, version),
     packages=find_packages(exclude=('tests',)),
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
