@@ -2,12 +2,12 @@ from optparse import OptionParser
 from configure import make_config, save_config
 from nest import collect_tasksets
 from locust import TaskSet, HttpLocust, run_locust, parse_options
-
 import sys
+
 
 def create_parser():
     """Create parser object used for defining all options for Locust.
-    
+
     Returns:
         OptionParser: OptionParser object used in *parse_options*.
     """
@@ -50,6 +50,7 @@ def create_parser():
     )
     return parser
 
+
 def parse_nest_options(args=sys.argv):
     """
     Handle command-line options with optparse.OptionParser.
@@ -66,11 +67,11 @@ def main(sys_args):
     nest_opts, nest_args = parse_nest_options(sys_args[1:])
     if nest_opts.configure:
         save_config(make_config(nest_opts.taskset_dir), nest_opts.config_file)
-        
 
     class NestTaskSet(TaskSet):
-        """TaskSet containing all the sub-tasksets contained in the specified directory.
-        
+        """TaskSet containing all the sub-tasksets contained
+        in the specified directory.
+
         Arguments:
             TaskSet {class} -- TaskSet class from Locust.
 
@@ -79,7 +80,7 @@ def main(sys_args):
 
     class NestLocust(HttpLocust):
         """HttpLocust using the NestTaskSet.
-        
+
         Arguments:
             HttpLocust {class} -- HttpLocust from Locust.
 
@@ -90,5 +91,5 @@ def main(sys_args):
     locust_opts.locust_classes = [NestLocust]
     run_locust(locust_opts, locust_args)
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main(sys.argv)
