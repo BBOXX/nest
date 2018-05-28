@@ -8,10 +8,10 @@ Welcome to Nest's documentation!
 .. toctree::
    :maxdepth: 2
 
-   RATIONALE
    INSTALLATION
    QUICKSTART
    source/modules
+   RATIONALE
 
 
 Indices and tables
