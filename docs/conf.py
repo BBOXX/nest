@@ -26,9 +26,9 @@ copyright = u'2018, George Punter'
 author = u'George Punter'
 
 # The short X.Y version
-version = u''
+version = u'0.1'
 # The full version, including alpha/beta/rc tags
-release = u''
+release = u'0.1beta'
 
 
 # -- General configuration ---------------------------------------------------
