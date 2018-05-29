@@ -1,5 +1,4 @@
-from configure import make_config, save_config
-from nest import collect_tasksets
+from . import make_config, save_config, collect_tasksets
 from locust import TaskSet, HttpLocust, run_locust, parse_options
 import logging
 import sys
@@ -93,7 +92,7 @@ def parse_nest_options(args=sys.argv):
     return opts, args
 
 
-def main(sys_args):
+def main(sys_args=None):
     nest_opts, nest_args = parse_nest_options(sys_args[1:])
     taskset_dir = nest_opts.taskset_dir
     if nest_opts.configure:
@@ -128,4 +127,4 @@ def main(sys_args):
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()

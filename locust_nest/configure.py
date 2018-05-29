@@ -1,4 +1,4 @@
-from nest import load_taskset_dir
+from . import load_taskset_dir
 import json
 import sys
 import os
