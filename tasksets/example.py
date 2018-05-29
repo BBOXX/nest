@@ -1,7 +1,7 @@
 from locust import TaskSet, task, HttpLocust
 
 
-class Model(TaskSet):
+class ExampleModel(TaskSet):
     weight = 0
 
     def on_start(self):
@@ -32,6 +32,6 @@ class Model(TaskSet):
         return
 
 
-class ModelLocust(HttpLocust):
+class ExampleModelLocust(HttpLocust):
     host = "http://127.0.0.1:8089"
     task_set = Model
