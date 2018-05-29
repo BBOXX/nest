@@ -56,7 +56,7 @@ def retry_valid_input(
 
     """
     if default is not None:
-        prompt += ' [{}]'.format(default)
+        prompt += ' [{}] '.format(default)
     while True:
         user_input = raw_input(prompt) or default
         # If user_input passes the condition, transform and save the output
