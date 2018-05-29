@@ -4,8 +4,7 @@ import logging
 import sys
 import os
 
-from optparse import (OptionParser, BadOptionError, AmbiguousOptionError)
-
+import argparse
 sys.path.insert(0, os.getcwd())
 
 logger = logging.getLogger(__name__)
@@ -13,25 +12,6 @@ logger.setLevel(logging.DEBUG)
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.DEBUG)
 logger.addHandler(stream_handler)
-
-
-class PassThroughOptionParser(OptionParser):
-    """
-    An unknown option pass-through implementation of OptionParser.
-
-    When unknown arguments are encountered, bundle with largs and try again,
-    until rargs is depleted.
-
-    sys.exit(status) will still be called if a known argument is passed
-    incorrectly (e.g. missing arguments or bad argument types, etc.)        
-    """
-
-    def _process_args(self, largs, rargs, values):
-        while rargs:
-            try:
-                OptionParser._process_args(self, largs, rargs, values)
-            except (BadOptionError, AmbiguousOptionError), e:
-                largs.append(e.opt_str)
 
 
 def create_parser():
@@ -42,9 +22,9 @@ def create_parser():
     """
 
     # Initialize
-    parser = PassThroughOptionParser(usage="nest [options] Locust options")
+    parser = argparse.ArgumentParser(usage="nest [options] Locust options")
 
-    parser.add_option(
+    parser.add_argument(
         '--configure',
         action='store_true',
         dest='configure',
@@ -52,7 +32,7 @@ def create_parser():
         help="Generate config file using helper."
     )
 
-    parser.add_option(
+    parser.add_argument(
         '--config_file',
         action='store',
         dest='config_file',
@@ -60,7 +40,7 @@ def create_parser():
         help="Specify config file location."
     )
 
-    parser.add_option(
+    parser.add_argument(
         '-T', '--taskset_dir',
         action='store',
         dest='taskset_dir',
@@ -70,7 +50,7 @@ def create_parser():
 
     # Version number (optparse gives you:version but we have to do it
     # ourselves to get -V too. sigh)
-    parser.add_option(
+    parser.add_argument(
         '-V', '--version',
         action='store_true',
         dest='show_version',
@@ -80,20 +60,9 @@ def create_parser():
     return parser
 
 
-def parse_nest_options(args=sys.argv):
-    """
-    Handle command-line options with optparse.OptionParser.
-
-    Return list of arguments, largely for use in `parse_arguments`.
-    """
+def main(args=None):
     parser = create_parser()
-    # Return tuple of the output from parse_args (opt obj, args)
-    opts, args = parser.parse_args(args)
-    return opts, args
-
-
-def main(sys_args=None):
-    nest_opts, nest_args = parse_nest_options(sys_args[1:])
+    nest_opts, nest_args = parser.parse_known_args()
     taskset_dir = nest_opts.taskset_dir
     if nest_opts.configure:
         save_config(make_config(taskset_dir), nest_opts.config_file)
