@@ -17,7 +17,7 @@ from setuptools import find_packages, setup, Command
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
 _init_file = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
-        "nest",
+        "locust-nest",
         "__init__.py")
 with open(_init_file, 'rb') as f:
     version = str(ast.literal_eval(_version_re.search(
@@ -102,7 +102,7 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    download_url='{}/archive/{version}.tar.gz'.format(URL, version),
+    download_url='{0}/archive/{1}.tar.gz'.format(URL, version),
     packages=find_packages(exclude=('tests',)),
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],

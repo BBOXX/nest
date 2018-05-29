@@ -26,7 +26,6 @@ def is_taskset(tup, ignore_prefix='_'):
 
 def load_taskset_file(path, ignore_class_prefix='_'):
     """Import given taskfile path and return (docstring, callables).
-
     Specifically, the taskfile's ``__doc__`` attribute (a string) and a
     dictionary of ``{'name': callable}`` containing all callables which pass
     the "is a TaskSet" test.
@@ -34,9 +33,9 @@ def load_taskset_file(path, ignore_class_prefix='_'):
     Arguments:
         path {string} -- path to file to search for TaskSets.
 
-    Returns: dict --
-            {__doc__:class callable, ...} for each TaskSet class that
-            does not start with *ignore_class_prefix*.
+    Returns:
+        dict -- {__doc__:class callable, ...} for each TaskSet class that
+                does not start with *ignore_class_prefix*.
 
     """
     # Get directory and taskfile name
@@ -58,15 +57,18 @@ def load_taskset_file(path, ignore_class_prefix='_'):
             # Add to front, then remove from original position
             sys.path.insert(0, directory)
             del sys.path[i + 1]
+
     # Perform the import (trimming off the .py)
     imported = __import__(os.path.splitext(taskfile)[0])
     # Remove directory from path if we added it ourselves (just to be neat)
     if added_to_path:
         del sys.path[0]
+
     # Put back in original index if we moved it
     if index is not None:
         sys.path.insert(index + 1, directory)
         del sys.path[0]
+
     # Return our two-tuple
     tasksets = dict(filter(lambda x: is_taskset(x, ignore_class_prefix),
                     vars(imported).items()))
