@@ -29,7 +29,7 @@ DESCRIPTION = 'Auto-import and compilation of locust TaskSets.'
 URL = 'https://github.com/ps-george/locust-nest'
 EMAIL = 'puntersg@gmail.com'
 AUTHOR = 'George Punter'
-REQUIRES_PYTHON = '>=3.6.0'
+# REQUIRES_PYTHON = '>=3.6.0'
 VERSION = version
 
 # What packages are required for this module to be executed?
@@ -100,7 +100,7 @@ setup(
     long_description_content_type='text/markdown',
     author=AUTHOR,
     author_email=EMAIL,
-    python_requires=REQUIRES_PYTHON,
+    # python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(exclude=('tests',)),
     # If your package is a single module, use this instead of 'packages':
