@@ -34,4 +34,4 @@ class ExampleModel(TaskSet):
 
 class ExampleModelLocust(HttpLocust):
     host = "http://127.0.0.1:8089"
-    task_set = Model
+    task_set = ExampleModel
