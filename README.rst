@@ -1,5 +1,120 @@
+locust-nest
+===========
+Import tasksets from a 'tasksets/' folder into a common class and run Locust using that class.
+
+Installation
+============
+
+This package depends on a cutting edge version of locust that has not been merged into the master repo or released yet.
+
+.. code-block:: bash
+
+    pip install -e git://github.com/ps-george/locust.git@master#egg=locustio
+    pip install locust-nest
+
+Quick start
+===========
+
+locust-nest is designed to provide a framework for simulating a specified load on a system.
+
+Behaviour models are codified using Locust, an open-source load testing tool that allows abitrarily complex user behaviour modelling since all tasks are written in Python. 
+
+This system works by searching all `.py` files in the `tasksets` directory and subdirectories for subclasses of `TaskSet` and adding these to a `NestTaskset`, which packages all the tasks with their desired weights into a `HTTPLocust` class. Note: Python 2 does not have support for recursive subdirectories, so only searchs 1 directory deep `tasksets/*/`
+
+To run locust-nest, simply use locust-nest command with default Locust arguments:
+
+.. code-block:: bash
+
+  locust-nest --taskset_dir=tasksets/ --host=https://www.example.com ...
+
+To be guided through the generation of a config file before running locust-nest as usual, run: 
+
+.. code-block:: bash
+
+  locust-nest --configure ...
+
+An example structure for one of these TaskSets is:
+
+.. code-block:: python
+
+  from locust import TaskSet, task
+
+  class ModelBehaviour(TaskSet):
+    weight = 0
+    def on_start(self):
+      # Log in & save token
+
+      # retrieve bulk information needed for other tasks
+
+      # other to-dos on starting this group of tasks
+      pass
+
+    def on_stop(self):
+      # unclaim resources e.g. username
+      pass
+    
+    @task(5) # task decorator with relative weight of executing the task
+    def model_action(self):
+      # codified behaviour of a particular action this model may perform
+      # e.g. registering a customer
+      return
+
+    @task(1)
+    def stop(self): # Kill this process and choose another from the tasksets folder
+      self.interrupt()
+    
+--configure flag
+----------------
+Ask user for each taskset the different weightings to use, and ask if you'd like to save these to a config file.
+
+Workflow
+~~~~~~~~
+
+1. Nest will import all TaskSets from `tasksets/`
+2. Run any dependencies e.g. flask webserver for shared data between Locusts.
+3. Using the values in the config file (or 'Get config from sub-tasksets' setting), assign the various weights.
+4. Display weightings that will be used with confirmation prompt (skippable with some commandline argument).
+4. Run Locust with weightings set from config (thoughts on how to run this using AWS Lambda/etc)
+
+Example TaskSet
+~~~~~~~~~~~~~~~
+.. code-block:: python
+
+    from locust import TaskSet, task
+
+    class ExampleModel(TaskSet):
+        weight = 0
+
+        def on_start(self):
+            """Set up before running tasks.
+
+            For example:
+            * Log in & save token
+            * Retrieve bulk information needed for other tasks
+
+            """
+            return
+
+        def on_stop(self):
+            """Teardown: unclaim resources e.g. claimed user.
+
+            """
+
+            return
+
+        # task decorator with relative weight of executing the task
+        @task(5) 
+        def model_action(self):
+            """Codified behaviour of a particular action this model may perform
+            e.g. registering a customer
+
+            """
+            self.client.get("/")
+            return
+
+
 Aims of locust-nest
-==============
+==============================
 Predict future scalability requirements and cost per customer.
 
 Nest Prouduct Management 
@@ -53,18 +168,8 @@ Locust is an open source Python framework for writing load tests.
 
 Off the bat Locust provides functionality for nearly all of the requirements for this project, which is why it was chosen over any alternatives.
 
-
-Under the hood
-~~~~~~~~~~~~~~
-
-Task weighting is done by populating the task list with X of each task, where X is that task's weight (defaulting to 1), and during the scheduling phase using `random.choice` to pick the next task to schedule. This is an elegantly simple way of doing this that works well without requiring any external packages (numpy.random has this functionality).
-
-The wait inbetween each executing task is determined using `random.randint(self.min*wait,self.max*wait)`, which gives a uniformly distributed wait time between each task within the bounds. It would be nice to be able to customise this with a function that gives an exponential wait time between the minimum and maximum to give a more realistic distribution, or allow user defined functions so that any distribution can be used to sample interarrival times of tasks. In most real world situations, inter-arrival times approximate to exponential distributions and it is a shame that locust cannot model this. I've submited a pull request to ammend this and allow any user-defined wait function to be used. Pull request merged! ...
-
-
 Locust was chosen because it is:
 1. All in Python. Since our codebase is Python it makes it easy to write tests alongside development. No need to learn a DSL or 'code' XML.
 2. Actively supported.
 3. Simple but able to simulate any situation.
 4. Possible to run distributed with master-slave configuration.
-
