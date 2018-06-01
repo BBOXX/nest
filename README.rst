@@ -1,5 +1,9 @@
 locust-nest
 ===========
+Documentation_
+
+.. _Documentation: https://ps-george.github.io/locust-nest
+
 Import tasksets from a 'tasksets/' folder into a common class and run Locust using that class.
 
 Installation
