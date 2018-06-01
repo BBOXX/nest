@@ -15,11 +15,12 @@ To run locust-nest, simply use locust-nest command with default Locust arguments
 
   locust-nest --taskset_dir=tasksets/ --host=https://www.example.com ...
 
-To be guided through the generation of a config file, run: 
+To be guided through the generation of a config file, use the `--configure` flag: 
 
 .. code-block:: bash
+  
+  locust-nest --configure --host=https://www.example.com ...
 
-  python configure.py
 
 An example structure for one of these TaskSets is:
 

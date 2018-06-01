@@ -12,7 +12,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
+import ast
 import os
+import re
 import sys
 
 from recommonmark.parser import CommonMarkParser
@@ -25,10 +28,18 @@ project = u'locust-nest'
 copyright = u'2018, George Punter'
 author = u'George Punter'
 
+_version_re = re.compile(r'__version__\s+=\s+(.*)')
+_init_file = os.path.join(
+        os.path.abspath('../'),
+        "locust_nest",
+        "__init__.py")
+with open(_init_file, 'rb') as f:
+    VERSION = str(ast.literal_eval(_version_re.search(
+        f.read().decode('utf-8')).group(1)))
 # The short X.Y version
-version = u'0.1'
+version = VERSION
 # The full version, including alpha/beta/rc tags
-release = u'0.1beta'
+release = '{}beta'.format(VERSION)
 
 
 # -- General configuration ---------------------------------------------------

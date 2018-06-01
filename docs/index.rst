@@ -3,6 +3,8 @@
 
 locust-nest
 ===========
+Source code: https://github.com/ps-george/locust-nest
+
 Import tasksets from a 'tasksets/' folder into a common class and run Locust using that class.
 
 .. toctree::
