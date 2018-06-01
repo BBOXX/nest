@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 
-project = u'Nest'
+project = u'locust-nest'
 copyright = u'2018, George Punter'
 author = u'George Punter'
 
@@ -109,7 +109,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Nestdoc'
+htmlhelp_basename = 'locust-nestdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -136,7 +136,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Nest.tex', u'Nest Documentation',
+    (master_doc, 'locust-nest.tex', u'locust-nest Documentation',
      u'George Punter', 'manual'),
 ]
 
@@ -146,7 +146,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'nest', u'Nest Documentation',
+    (master_doc, 'nest', u'locust-nest Documentation',
      [author], 1)
 ]
 
@@ -157,8 +157,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Nest', u'Nest Documentation',
-     author, 'Nest', 'One line description of project.',
+    (master_doc, 'locust-nest', u'locust-nest Documentation',
+     author, 'locust-nest', 'One line description of project.',
      'Miscellaneous'),
 ]
 
