@@ -34,7 +34,7 @@ VERSION = version
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'locustio'
+    '-e git://github.com/ps-george/locust.git@master#egg=locustio'
 ]
 
 here = os.path.abspath(os.path.dirname(__file__))

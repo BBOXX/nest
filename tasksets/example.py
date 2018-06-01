@@ -22,7 +22,7 @@ class ExampleModel(TaskSet):
         return
 
     # task decorator with relative weight of executing the task
-    @task(5) 
+    @task(5)
     def model_action(self):
         """Codified behaviour of a particular action this model may perform
         e.g. registering a customer
