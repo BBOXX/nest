@@ -6,7 +6,9 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = locust-nest
 SOURCEDIR     = .
-BUILDDIR      = _build
+BUILDDIR      = ../../locust-nest-docs
+PDFBUILDDIR = /tmp
+PDF = ../manual.pdf
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -14,7 +16,15 @@ help:
 
 .PHONY: help Makefile
 
+latexpdf:
+	$(SPHINXBUILD) -b latex "$(SOURCEDIR)" $(PDFBUILDDIR)/latex
+	@echo "Running LaTeX files through pdflatex..."
+	make -C $(PDFBUILDDIR)/latex all-pdf
+	cp $(PDFBUILDDIR)/latex/*.pdf $(PDF)
+	@echo "pdflatex finished; see $(PDF)"
+
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
