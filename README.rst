@@ -63,7 +63,7 @@ An example structure for one of these TaskSets is:
     def stop(self): # Kill this process and choose another from the tasksets folder
       self.interrupt()
     
---configure flag
+configure flag
 ----------------
 Ask user for each taskset the different weightings to use, and ask if you'd like to save these to a config file.
 
@@ -71,10 +71,10 @@ Workflow
 ~~~~~~~~
 
 1. Nest will import all TaskSets from `tasksets/`
-2. Run any dependencies e.g. flask webserver for shared data between Locusts.
+2. Run any dependencies e.g. flask webserver for shared data between Locusts. (NOT IMPLEMENTED.)
 3. Using the values in the config file (or 'Get config from sub-tasksets' setting), assign the various weights.
 4. Display weightings that will be used with confirmation prompt (skippable with some commandline argument).
-4. Run Locust with weightings set from config (thoughts on how to run this using AWS Lambda/etc)
+5. Run Locust with weightings set from config (thoughts on how to run this using AWS Lambda/etc)
 
 Example TaskSet
 ~~~~~~~~~~~~~~~
@@ -169,6 +169,7 @@ Locust is an open source Python framework for writing load tests.
 Off the bat Locust provides functionality for nearly all of the requirements for this project, which is why it was chosen over any alternatives.
 
 Locust was chosen because it is:
+
 1. All in Python. Since our codebase is Python it makes it easy to write tests alongside development. No need to learn a DSL or 'code' XML.
 2. Actively supported.
 3. Simple but able to simulate any situation.

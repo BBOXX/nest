@@ -1,5 +1,5 @@
 Aims of locust-nest
-==============
+===================
 Predict future scalability requirements and cost per customer.
 
 Nest Prouduct Management 
@@ -53,16 +53,8 @@ Locust is an open source Python framework for writing load tests.
 
 Off the bat Locust provides functionality for nearly all of the requirements for this project, which is why it was chosen over any alternatives.
 
-
-Under the hood
-~~~~~~~~~~~~~~
-
-Task weighting is done by populating the task list with X of each task, where X is that task's weight (defaulting to 1), and during the scheduling phase using `random.choice` to pick the next task to schedule. This is an elegantly simple way of doing this that works well without requiring any external packages (numpy.random has this functionality).
-
-The wait inbetween each executing task is determined using `random.randint(self.min*wait,self.max*wait)`, which gives a uniformly distributed wait time between each task within the bounds. It would be nice to be able to customise this with a function that gives an exponential wait time between the minimum and maximum to give a more realistic distribution, or allow user defined functions so that any distribution can be used to sample interarrival times of tasks. In most real world situations, inter-arrival times approximate to exponential distributions and it is a shame that locust cannot model this. I've submited a pull request to ammend this and allow any user-defined wait function to be used. Pull request merged! ...
-
-
 Locust was chosen because it is:
+
 1. All in Python. Since our codebase is Python it makes it easy to write tests alongside development. No need to learn a DSL or 'code' XML.
 2. Actively supported.
 3. Simple but able to simulate any situation.
