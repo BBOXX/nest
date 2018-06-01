@@ -12,11 +12,6 @@ Import tasksets from a 'tasksets/' folder into a common class and run Locust usi
    QUICKSTART
    RATIONALE
 
-Directory structure
-
-- docs: documentation
-- tasksets: directory for tasksets 
-
 Indices and tables
 ==================================
 
