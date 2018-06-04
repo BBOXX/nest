@@ -1,5 +1,8 @@
 # !/bin/bash
-cd "${0%/*}"
+
+# Ensure the script always runs from the same location
+script_path=$(dirname "$0")
+cd "$script_path"
 
 # `make html` into locust-nest-docs/html
 mkdir ../../locust-nest-docs
