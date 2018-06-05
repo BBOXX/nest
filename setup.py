@@ -53,7 +53,8 @@ def get_requirements(remove_links=True):
 
 # What packages are required for this module to be executed?
 REQUIRED = get_requirements()
-
+REQUIRED.append('locustio')
+print("Requires:\n{}".format(REQUIRED))
 
 def get_links():
     """
