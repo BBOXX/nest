@@ -1,4 +1,4 @@
-from . import load_taskset_dir
+from nest import load_taskset_dir, load_locust_dir
 import json
 import sys
 import os
@@ -67,11 +67,11 @@ def retry_valid_input(
     return transform(user_input)
 
 
-def make_config(dir_path=None, **kwargs):
+def make_config(dir_path=None):
     """Guide a user through making a config file for Nest.
 
     Keyword Arguments:
-        dir_path {str (path)} -- Folder in which the user's TaskSets reside.
+        dir_path {str (path)} -- Folder with user's Locusts & TaskSets.
                                  (default: {None})
 
     Returns:
@@ -80,43 +80,47 @@ def make_config(dir_path=None, **kwargs):
     """
 
     # For each TaskSet found using collect tasksets
-    # Proportion first / then total amount.
-    # If interactive mode, ask for taskset dir (with default)
-    if dir_path is None:
-        dir_path = retry_valid_input(
-                prompt='Enter the path of your taskset directory:',
-                title='directory',
-                default='tasksets/',
-                condition=os.path.exists)
     tasksets = load_taskset_dir(dir_path)
-
-    # Set quantities of various tasks
-    quantities = {}
-    total = 0
+    taskset_qs = {}
+    total_tasksets = 0
 
     def default_weight(callee):
-        # try:
-        return callee.weight
+        try:
+            return callee.weight
+        except:
+            return 1
 
     for name, callee in tasksets.items():
-        quantity = kwargs.get(name, None)
-        if quantity is None:
-            quantity = retry_valid_input(
-                    prompt='How many {}s would you like to have?'.format(name),
-                    title='quantity',
-                    condition=is_int,
-                    default=default_weight(callee),
-                    transform=int)
-        quantities[name] = quantity
-        total += quantity
-        # for task in callee.tasks:
-        # logger.debug(task.func_name)
-    # logger.info('Quantities: {}'.format(quantities))
-    # logger.info('Total: {}'.format(total))
+        t_quantity = retry_valid_input(
+                prompt='How many {}s would you like to have?'.format(name),
+                title='quantity',
+                condition=is_int,
+                default=default_weight(callee),
+                transform=int)
+        taskset_qs[name] = t_quantity
+        total_tasksets += t_quantity
+
+    # Load locusts
+    locust_qs = {}
+    total_locusts = 0
+    locusts = load_locust_dir(dir_path)
+    for name, callee in locusts.items():
+        l_quantity = retry_valid_input(
+                prompt='How many {}s would you like to have?'.format(name),
+                title='quantity',
+                condition=is_int,
+                default=default_weight(callee),
+                transform=int)
+        locust_qs[name] = l_quantity
+        total_locusts += l_quantity
+
     config = {
-        'models': quantities,
-        'total': total
+        'tasksets': taskset_qs,
+        'total_tasksets': total_tasksets,
+        'locusts': locust_qs,
+        'total_locusts': total_locusts
     }
+
     return config
 
 
@@ -141,6 +145,7 @@ def save_config(config, config_file=None):
                 prompt='What would you like to name this config?',
                 title='config file',
                 default='config.json')
+    logger.info('Saving config to {}'.format(config_file))
     with open(config_file, 'w') as f:
         json.dump(config, f)
     if os.path.exists(config_file):

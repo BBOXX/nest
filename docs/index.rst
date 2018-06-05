@@ -5,7 +5,8 @@ locust-nest
 ===========
 Source code: https://github.com/ps-george/locust-nest
 
-Import tasksets from a 'tasksets/' folder into a common class and run Locust using that class.
+Import TaskSets from a 'models/' folder into a common class and collect other Locust classes,
+then run Locust using those classes with weights determined in a config file.
 
 .. toctree::
    :maxdepth: 2

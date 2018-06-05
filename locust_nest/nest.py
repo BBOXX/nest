@@ -7,87 +7,25 @@ import random
 import sys
 
 from locust import HttpLocust, TaskSet, task
+from locust.main import load_locustfile, load_tasksetfile
 
 logger = logging.getLogger(__name__)
 
 
-def is_taskset(tup, ignore_prefix='_'):
-    """Takes (name, object) tuple, returns True if it's a
-    public TaskSet subclass."""
-    name, item = tup
-    return bool(
-        inspect.isclass(item) and
-        issubclass(item, TaskSet) and
-        hasattr(item, "tasks") and
-        not name.startswith(ignore_prefix) and
-        name != 'TaskSet'
-    )
-
-
-def load_taskset_file(path, ignore_class_prefix='_'):
-    """Import given taskfile path and return (docstring, callables).
-    Specifically, the taskfile's ``__doc__`` attribute (a string) and a
-    dictionary of ``{'name': callable}`` containing all callables which pass
-    the "is a TaskSet" test.
-
-    Arguments:
-        path {string} -- path to file to search for TaskSets.
-
-    Returns:
-        dict -- {__doc__:class callable, ...} for each TaskSet class that
-                does not start with *ignore_class_prefix*.
-
-    """
-    # Get directory and taskfile name
-    directory, taskfile = os.path.split(path)
-    # If the directory isn't in the PYTHONPATH, add it so our import will work
-    added_to_path = False
-    index = None
-    if directory not in sys.path:
-        sys.path.insert(0, directory)
-        added_to_path = True
-    # If the directory IS in the PYTHONPATH, move it to the front temporarily,
-    # otherwise other taskfiles -- like Locusts's own -- may scoop the intended
-    # one.
-    else:
-        i = sys.path.index(directory)
-        if i != 0:
-            # Store index for later restoration
-            index = i
-            # Add to front, then remove from original position
-            sys.path.insert(0, directory)
-            del sys.path[i + 1]
-
-    # Perform the import (trimming off the .py)
-    imported = __import__(os.path.splitext(taskfile)[0])
-    # Remove directory from path if we added it ourselves (just to be neat)
-    if added_to_path:
-        del sys.path[0]
-
-    # Put back in original index if we moved it
-    if index is not None:
-        sys.path.insert(index + 1, directory)
-        del sys.path[0]
-
-    # Return our two-tuple
-    tasksets = dict(filter(lambda x: is_taskset(x, ignore_class_prefix),
-                    vars(imported).items()))
-    return tasksets
-
-
-def load_taskset_dir(dir_path='tasksets/', ignore_file_prefix='_'):
-    """Searches the directory at *dir_path* and subdirectories for all TaskSet
-    sub-classes not starting with *ignore_prefix*, finds and imports all
-    tasksets and returns dictionary with name and class callable.
+def load_dir(dir_path, func, ignore_prefix='_'):
+    """Searches the directory at *dir_path* and subdirectories for all
+    sub-classes not starting with *ignore_prefix* and specified by func,
+    finds and imports all classes and returns dictionary with name and class
+    callable.
 
     Arguments:
         dir_path {string} -- path to the directory to import TaskSet classes.
         ignore_file_prefix {string} -- Ignore all files starting with prefix.
 
     Returns: dict -- {__doc__:class callable} for each *.py file in *dir_path*.
-
     """
-    tasksets = {}
+
+    classes = {}
     filepaths = (glob.glob('{}**/*.py'.format(dir_path)) +
                  glob.glob('{}/*.py'.format(dir_path)))
     if not filepaths:
@@ -97,24 +35,42 @@ def load_taskset_dir(dir_path='tasksets/', ignore_file_prefix='_'):
 
     for filepath in filepaths:
         _, filename = os.path.split(filepath)
-        if not filename.startswith(ignore_file_prefix):
+        if not filename.startswith(ignore_prefix):
             logger.info('Checking {} for TaskSets'.format(filepath))
-            t2 = load_taskset_file(filepath)
-            tasksets.update(t2)
-    return tasksets
+            _, t2 = func(filepath)
+            classes.update(t2)
+    return classes
 
 
-def collect_tasksets(dir_path='tasksets/', config_file='config.json'):
-    """Load tasksets into a dictionary format used by TaskSets to specify
-    tasks and their weights. Adds the stop() method to the tasks of all
-    TaskSets imported in this way.
+def load_taskset_dir(dir_path='tasksets/', ignore_prefix='_'):
+    """Searches the directory at *dir_path* and subdirectories for all TaskSet
+    sub-classes not starting with *ignore_prefix*, finds and imports all
+    classes and returns dictionary with name and class callable.
 
-    Returns:
-        dict -- {class callable : weight, ... } 
-                OR empty dict if no TaskSets are found.
+    Arguments:
+        dir_path {string} -- path to the directory to import TaskSet classes.
+        ignore_file_prefix {string} -- Ignore all files starting with prefix.
 
+    Returns: dict -- {__doc__:class callable} for each *.py file in *dir_path*.
     """
+    return load_dir(dir_path, load_tasksetfile, ignore_prefix)
 
+
+def load_locust_dir(dir_path='locusts/', ignore_prefix='_'):
+    """Searches the directory at *dir_path* and subdirectories for all Locust
+    sub-classes not starting with *ignore_prefix*, finds and imports all
+    classes and returns dictionary with name and class callable.
+
+    Arguments:
+        dir_path {string} -- path to the directory to import TaskSet classes.
+        ignore_file_prefix {string} -- Ignore all files starting with prefix.
+
+    Returns: dict -- {__doc__:class callable} for each *.py file in *dir_path*.
+    """
+    return load_dir(dir_path, load_locustfile, ignore_prefix)
+
+
+def load_config(config_file):
     config = {}
     if os.path.exists(config_file):
         with open(config_file, 'r') as f:
@@ -125,14 +81,28 @@ def collect_tasksets(dir_path='tasksets/', config_file='config.json'):
                 logging.warning(
                     'Config file ({}) format invalid.'.format(config_file)
                 )
-                pass
-    else:
+    return config
+
+
+def collect_tasksets(dir_path='tasksets/', config_file='config.json'):
+    """Load tasksets into a dictionary format used by TaskSets to specify
+    tasks and their weights. Adds the stop() method to the tasks of all
+    TaskSets imported in this way.
+
+    Returns:
+        dict -- {class callable : weight, ... }
+                OR empty dict if no TaskSets are found.
+
+    """
+
+    config = load_config(config_file)
+    if not config:
         logging.info('No config file found, will use defaults.')
     tasksets = load_taskset_dir(dir_path)
     if not tasksets:
         return {}
     nest_tasks = {}
-    weights = config.get('models', None)
+    weights = config.get('tasksets', None)
     for key, callee in tasksets.items():
         try:
             weight = weights[key]
@@ -153,7 +123,46 @@ def collect_tasksets(dir_path='tasksets/', config_file='config.json'):
             self.interrupt()
 
         if weight:
-            callee.tasks.append(stop)
-            nest_tasks[callee] = weight
+            if weight > 0:
+                callee.tasks.append(stop)
+                nest_tasks[callee] = weight
     logger.info("Found following tasksets and weights: {}".format(nest_tasks))
     return nest_tasks
+
+
+def collect_locusts(dir_path='locusts/', config_file='config.json'):
+    # From config file get weights for each of the locust classes
+    config = load_config(config_file)
+    if not config:
+        logging.info('No config file found, will use defaults.')
+
+    # Find all the Locust classes
+    locusts = load_locust_dir(dir_path)
+
+    if not locusts:
+        return []
+    locust_classes = []
+
+    weights = config.get('locusts', None)
+    for key, callee in locusts.items():
+        try:
+            weight = weights[key]
+        except TypeError:
+            msg = """No weight given for {} Locust in config,
+                      using default from Locust.""".format(key)
+            logger.info(msg)
+            try:
+                weight = callee.weight
+            except AttributeError:
+                msg = """No default weight given for {} TaskSet in TaskSet
+                         definition {}.weight, using 1.""".format(key, key)
+                logger.info(msg)
+                weight = 1
+        if weight:
+            setattr(locusts[key], 'weight', weight)
+            if weight > 0:
+                locust_classes.append(locusts[key])
+    locust_weights = [(key, callee.weight) for key, callee in locusts.items()]
+    logger.info(
+        "Found the following Locusts and weights: {}".format(locust_weights))
+    return locust_classes

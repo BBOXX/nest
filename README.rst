@@ -4,7 +4,8 @@ Documentation_
 
 .. _Documentation: https://ps-george.github.io/locust-nest
 
-Import tasksets from a 'tasksets/' folder into a common class and run Locust using that class.
+Import TaskSets from a 'models/' folder into a common class and collect other Locust classes,
+then run Locust using those classes with weights determined in a config file.
 
 Installation
 ============
@@ -22,19 +23,23 @@ locust-nest is designed to provide a framework for simulating a specified load o
 
 Behaviour models are codified using Locust, an open-source load testing tool that allows abitrarily complex user behaviour modelling since all tasks are written in Python. 
 
-This system works by searching all `.py` files in the `tasksets` directory and subdirectories for subclasses of `TaskSet` and adding these to a `NestTaskset`, which packages all the tasks with their desired weights into a `HTTPLocust` class. Note: Python 2 does not have support for recursive subdirectories, so only searchs 1 directory deep `tasksets/*/`
+This system works by searching all `.py` files in the `models` directory and subdirectories for subclasses of `TaskSet` and adding these to a `NestTaskset`,
+which packages all the tasks with their desired weights into a `HTTPLocust` class. Then is searches for subclasses of `Locust` and runs Locust with all
+of those classes, with weights specified in a --config_file.
+Note: Python 2 does not have support for recursive subdirectories, so at the moment only searches 1 directory deep `tasksets/*/`
 
 To run locust-nest, simply use locust-nest command with default Locust arguments:
 
 .. code-block:: bash
 
-  locust-nest --taskset_dir=tasksets/ --host=https://www.example.com ...
+  locust-nest --model_dir=models/ --host=https://www.example.com ...
 
-To be guided through the generation of a config file before running locust-nest as usual, run: 
+To be guided through the generation of a config file, use the `--configure` flag: 
 
 .. code-block:: bash
+  
+  locust-nest --configure --host=https://www.example.com ...
 
-  locust-nest --configure ...
 
 An example structure for one of these TaskSets is:
 
@@ -73,14 +78,16 @@ Ask user for each taskset the different weightings to use, and ask if you'd like
 Workflow
 ~~~~~~~~
 
-1. Nest will import all TaskSets from `tasksets/`
-2. Run any dependencies e.g. flask webserver for shared data between Locusts. (NOT IMPLEMENTED.)
-3. Using the values in the config file (or 'Get config from sub-tasksets' setting), assign the various weights.
+1. Nest will import all TaskSets from `models/` into one NestLocust, weighting according to --config_file.
+2. Nest will find all Locust's, weighting according to --config_file.
+3. Run any dependencies e.g. flask webserver for shared data between Locusts. (NOT IMPLEMENTED.)
 4. Display weightings that will be used with confirmation prompt (skippable with some commandline argument).
-5. Run Locust with weightings set from config (thoughts on how to run this using AWS Lambda/etc)
+5. Run Locust with weightings set from config for the Locusts and NestLocust classes
+6. Nest will have an option to automatically manage distributed resources for Locust master-slave mode. (NOT IMPLEMENTED)
 
 Example TaskSet
 ~~~~~~~~~~~~~~~
+
 .. code-block:: python
 
     from locust import TaskSet, task
@@ -119,12 +126,13 @@ Example TaskSet
 Aims of locust-nest
 ===================
 
-1. Users will be able to place any number of directories containing TaskSets, 
-   with each TaskSet representing an encapsulated group of tasks.
+1. Users will be able to place any number of directories containing TaskSets 
+   and Locusts with each representing an encapsulated group of tasks.
 2. locust-nest will find all TaskSets contained in a specified directory
    and group them into one Locust class with corresponding weights specified
    in a config file, allowing easy modularity in adding or removing TaskSets
-   without needing to change any code in the locust-nest repository.
+   without needing to change any code in the locust-nest repository. Locusts
+   will also be found and configured with specific weights.
 3. There will be an interactive configure option which creates a config file
    that specifies the relative weights of each TaskSet, allowing users to easily
    adjust the different ratios of TaskSet types, but still allowing non-interactive 
