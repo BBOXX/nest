@@ -72,6 +72,6 @@ Workflow
 Example TaskSet
 ~~~~~~~~~~~~~~~
 
-.. literalinclude:: ../tasksets/example.py
+.. literalinclude:: ../models/example.py
   :language: python
   :linenos:
