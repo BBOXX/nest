@@ -1,1 +1,1 @@
-git://github.com/ps-george/locust.git@master#egg=locustio
+pslocust
