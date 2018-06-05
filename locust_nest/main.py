@@ -1,7 +1,7 @@
 from configure import make_config, save_config, retry_valid_input
 from nest import collect_tasksets, collect_locusts
 from locust import TaskSet, HttpLocust, run_locust, parse_options
-from . import __version__ as version
+from version import __version__ as version
 import logging
 import sys
 import os

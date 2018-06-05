@@ -18,7 +18,7 @@ _version_re = re.compile(r'__version__\s+=\s+(.*)')
 _init_file = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
         "locust_nest",
-        "__init__.py")
+        "version.py")
 with open(_init_file, 'rb') as f:
     version = str(ast.literal_eval(_version_re.search(
         f.read().decode('utf-8')).group(1)))
