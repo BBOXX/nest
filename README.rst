@@ -23,10 +23,12 @@ locust-nest is designed to provide a framework for simulating a specified load o
 
 Behaviour models are codified using Locust, an open-source load testing tool that allows abitrarily complex user behaviour modelling since all tasks are written in Python. 
 
-This system works by searching all `.py` files in the `models` directory and subdirectories for subclasses of `TaskSet` and adding these to a `NestTaskset`,
-which packages all the tasks with their desired weights into a `HTTPLocust` class. Then is searches for subclasses of `Locust` and runs Locust with all
+This wrapper searches all `.py` files in the `--model_dir (-d)` directory and subdirectories for subclasses of `Locust` and runs Locust with all of those classes,
+with the desired weights of each `Locust` subclass specified in the `--config_file`.
+
+If the `--include-tasksets (-T)` flag is used, it will also find all subclasses of `TaskSet` and add these to a `NestTaskset`,
+which packages all the tasks with their desired weights into a `HTTPLocust` class.
 of those classes, with weights specified in a --config_file.
-Note: Python 2 does not have support for recursive subdirectories, so at the moment only searches 1 directory deep `tasksets/*/`
 
 To run locust-nest, simply use locust-nest command with default Locust arguments:
 

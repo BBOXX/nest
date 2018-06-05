@@ -43,6 +43,14 @@ def create_parser():
     )
 
     parser.add_argument(
+        '-T', '--include-tasksets',
+        action='store_true',
+        dest='include_tasksets',
+        default=False,
+        help="Whether or not to include TaskSets."
+    )
+
+    parser.add_argument(
         '-d', '--model_dir',
         action='store',
         dest='model_dir',
@@ -71,6 +79,7 @@ def main(args=None):
 
     parser = create_parser()
     nest_opts, nest_args = parser.parse_known_args()
+    include_tasksets = nest_opts.include_tasksets
 
     if nest_opts.show_version:
         print("locust-nest version {}".format(version))
@@ -85,37 +94,38 @@ def main(args=None):
                 condition=os.path.exists)
 
     if nest_opts.configure:
-        save_config(make_config(model_dir), nest_opts.config_file)
+        save_config(make_config(model_dir, include_tasksets), nest_opts.config_file)
 
     # Locust classes model_dir = nest_opts.model_dir
     locust_classes = collect_locusts(model_dir)
 
     # Tasksets
-    nest_tasks = collect_tasksets(dir_path=model_dir)
-    if not nest_tasks:
-        logger.warning('No TaskSets found in {}'.format(model_dir))
+    if include_tasksets:
+        nest_tasks = collect_tasksets(dir_path=model_dir)
+        if not nest_tasks:
+            logger.warning('No TaskSets found in {}'.format(model_dir))
 
-    if nest_tasks:
-        class NestTaskSet(TaskSet):
-            """TaskSet containing all the sub-tasksets contained
-            in the specified directory.
+        if nest_tasks:
+            class NestTaskSet(TaskSet):
+                """TaskSet containing all the sub-tasksets contained
+                in the specified directory.
 
-            Arguments:
-                TaskSet {class} -- TaskSet class from Locust.
+                Arguments:
+                    TaskSet {class} -- TaskSet class from Locust.
 
-            """
-            tasks = nest_tasks
+                """
+                tasks = nest_tasks
 
-        class NestLocust(HttpLocust):
-            """HttpLocust using the NestTaskSet.
+            class NestLocust(HttpLocust):
+                """HttpLocust using the NestTaskSet.
 
-            Arguments:
-                HttpLocust {class} -- HttpLocust from Locust.
+                Arguments:
+                    HttpLocust {class} -- HttpLocust from Locust.
 
-            """
-            task_set = NestTaskSet
-            weight = 1
-        locust_classes.append(NestLocust)
+                """
+                task_set = NestTaskSet
+                weight = 1
+            locust_classes.append(NestLocust)
 
     _, locust_opts, locust_args = parse_options(nest_args)
     locust_opts.locust_classes = locust_classes

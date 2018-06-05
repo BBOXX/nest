@@ -67,7 +67,7 @@ def retry_valid_input(
     return transform(user_input)
 
 
-def make_config(dir_path=None):
+def make_config(dir_path=None, include_tasksets=False):
     """Guide a user through making a config file for Nest.
 
     Keyword Arguments:
@@ -79,26 +79,26 @@ def make_config(dir_path=None):
 
     """
 
-    # For each TaskSet found using collect tasksets
-    tasksets = load_taskset_dir(dir_path)
-    taskset_qs = {}
-    total_tasksets = 0
-
     def default_weight(callee):
         try:
             return callee.weight
         except:
             return 1
 
-    for name, callee in tasksets.items():
-        t_quantity = retry_valid_input(
-                prompt='How many {}s would you like to have?'.format(name),
-                title='quantity',
-                condition=is_int,
-                default=default_weight(callee),
-                transform=int)
-        taskset_qs[name] = t_quantity
-        total_tasksets += t_quantity
+    # For each TaskSet found using collect tasksets
+    taskset_qs = {}
+    total_tasksets = 0
+    if include_tasksets:
+        tasksets = load_taskset_dir(dir_path)
+        for name, callee in tasksets.items():
+            t_quantity = retry_valid_input(
+                    prompt='How many {}s would you like to have?'.format(name),
+                    title='quantity',
+                    condition=is_int,
+                    default=default_weight(callee),
+                    transform=int)
+            taskset_qs[name] = t_quantity
+            total_tasksets += t_quantity
 
     # Load locusts
     locust_qs = {}
