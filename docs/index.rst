@@ -24,6 +24,9 @@ Locust
 .. _Locust: https://github.com/locustio/locust
 .. _locust.io: https://locust.io
 
+Table of Contents
+=================
+
 .. toctree::
    :maxdepth: 2
 
@@ -32,7 +35,7 @@ Locust
    RATIONALE
 
 Indices and tables
-==================================
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`
