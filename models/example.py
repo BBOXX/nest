@@ -3,6 +3,27 @@ from locust import TaskSet, task, HttpLocust
 
 class ExampleModel(TaskSet):
     weight = 0
+    auth_endpoint = ''
+    auth_header = {'Authorization': 'Bearer {}'}
+    username = None
+    password = None
+
+
+    def login(self, username, password, auth_endpoint):
+        payload = {
+            'userName': username,
+            'password': password
+        }
+        headers = {'Content-Type': 'application/json'}
+        r = self.client.post(auth_endpoint, headers = headers, json = payload)
+        if r.ok:
+            jr = r.json()
+            self.token = jr.get('token')
+            return True
+        else:
+            print(r.content)
+            r.raise_for_status()
+            return False
 
     def on_start(self):
         """Set up before running tasks.
@@ -12,7 +33,7 @@ class ExampleModel(TaskSet):
         * Retrieve bulk information needed for other tasks
 
         """
-        return
+        return self.login(self.username, self.password, self.auth_endpoint)
 
     def on_stop(self):
         """Teardown: unclaim resources e.g. claimed user.
@@ -25,7 +46,7 @@ class ExampleModel(TaskSet):
     @task(5)
     def model_action(self):
         """Codified behaviour of a particular action this model may perform
-        e.g. registering a customer
+        e.g. viewing user details
 
         """
         self.client.get("/")

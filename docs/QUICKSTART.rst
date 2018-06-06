@@ -7,12 +7,7 @@ locust-nest is designed to provide a framework for simulating a specified load o
 
 Behaviour models are codified using Locust, an open-source load testing tool that allows abitrarily complex user behaviour modelling since all tasks are written in Python. 
 
-This wrapper searches all `.py` files in the `--model_dir (-d)` directory and subdirectories for subclasses of `Locust` and runs Locust with all of those classes.
-
-If the `--include-tasksets (-T)` flag is used, it will also find all subclasses of `TaskSet` and add these to a `NestTaskset`,
-which packages all the tasks with their desired weights into a `HTTPLocust` class.
-of those classes, with weights specified in a --config_file.
-Note: Python 2 does not have support for recursive subdirectories, so at the moment only searches 1 directory deep `{model_dir}/*/`
+This wrapper searches all `.py` files in the :code:`--model_dir (-d)` directory and subdirectories for subclasses of `Locust` and runs Locust with all of those classes.
 
 To run locust-nest, simply use locust-nest command with default Locust arguments:
 
@@ -20,7 +15,7 @@ To run locust-nest, simply use locust-nest command with default Locust arguments
 
   locust-nest --model_dir=models/ --host=https://www.example.com ...
 
-To be guided through the generation of a config file, use the `--configure` flag: 
+To be guided through the generation of a config file, use the :code:`--configure` flag: 
 
 .. code-block:: bash
   
@@ -52,11 +47,13 @@ An example structure for one of these TaskSets is:
       # codified behaviour of a particular action this model may perform
       # e.g. registering a customer
       return
-
-    @task(1)
-    def stop(self): # Kill this process and choose another from the tasksets folder
-      self.interrupt()
     
+
+If the :code:`--include-tasksets (-T)` flag is used, it will also find all subclasses of `TaskSet` and add these to a `NestTaskset`,
+which packages all the tasks with their desired weights into a `HTTPLocust` class.
+of those classes, with weights specified in a :code:`--config_file`.
+Note: Python 2 does not have support for recursive subdirectories, so at the moment only searches 1 directory deep :code:`{model_dir}/*/`
+
 configure flag
 ----------------
 Ask user for each taskset the different weightings to use, and ask if you'd like to save these to a config file.
@@ -64,8 +61,8 @@ Ask user for each taskset the different weightings to use, and ask if you'd like
 Workflow
 ~~~~~~~~
 
-1. Nest will import all TaskSets from `models/` into one NestLocust, weighting according to --config_file.
-2. Nest will find all Locust's, weighting according to --config_file.
+1. Nest will import all TaskSets from `models/` into one NestLocust, weighting according to :code:`--config_file`.
+2. Nest will find all Locust's, weighting according to :code:`--config_file`.
 3. Run any dependencies e.g. flask webserver for shared data between Locusts. (NOT IMPLEMENTED.)
 4. Display weightings that will be used with confirmation prompt (skippable with some commandline argument).
 5. Run Locust with weightings set from config for the Locusts and NestLocust classes
