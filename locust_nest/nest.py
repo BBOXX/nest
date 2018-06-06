@@ -36,7 +36,7 @@ def load_dir(dir_path, func, ignore_prefix='_'):
     for filepath in filepaths:
         _, filename = os.path.split(filepath)
         if not filename.startswith(ignore_prefix):
-            logger.info('Checking {} for TaskSets'.format(filepath))
+            logger.info('Checking {}'.format(filepath))
             _, t2 = func(filepath)
             classes.update(t2)
     return classes
@@ -53,7 +53,8 @@ def load_taskset_dir(dir_path='tasksets/', ignore_prefix='_'):
 
     Returns: dict -- {__doc__:class callable} for each *.py file in *dir_path*.
     """
-    return load_dir(dir_path, load_tasksetfile, ignore_prefix)
+    tasksets = load_dir(dir_path, load_tasksetfile, ignore_prefix)
+    return tasksets
 
 
 def load_locust_dir(dir_path='locusts/', ignore_prefix='_'):
@@ -67,7 +68,8 @@ def load_locust_dir(dir_path='locusts/', ignore_prefix='_'):
 
     Returns: dict -- {__doc__:class callable} for each *.py file in *dir_path*.
     """
-    return load_dir(dir_path, load_locustfile, ignore_prefix)
+    locusts = load_dir(dir_path, load_locustfile, ignore_prefix)
+    return locusts
 
 
 def load_config(config_file):
@@ -78,9 +80,7 @@ def load_config(config_file):
                 config = json.load(f)
             except ValueError:
                 # Config format invalid
-                logging.warning(
-                    'Config file ({}) format invalid.'.format(config_file)
-                )
+                logger.warning('Config file ({}) format invalid.'.format(config_file))
     return config
 
 
@@ -96,8 +96,8 @@ def collect_tasksets(dir_path='tasksets/', config_file='config.json'):
     """
 
     config = load_config(config_file)
-    if not config:
-        logging.info('No config file found, will use defaults.')
+    if config=={}:
+        logger.info('No config file found, will use defaults.')
     tasksets = load_taskset_dir(dir_path)
     if not tasksets:
         return {}
@@ -122,7 +122,7 @@ def collect_tasksets(dir_path='tasksets/', config_file='config.json'):
         def stop(self):
             self.interrupt()
 
-        if weight:
+        if weight is not None:
             if weight > 0:
                 callee.tasks.append(stop)
                 nest_tasks[callee] = weight
@@ -130,11 +130,10 @@ def collect_tasksets(dir_path='tasksets/', config_file='config.json'):
     return nest_tasks
 
 
-def collect_locusts(dir_path='locusts/', config_file='config.json'):
-    # From config file get weights for each of the locust classes
+def collect_locusts(dir_path='locusts/', config_file='config.json'): # From config file get weights for each of the locust classes
     config = load_config(config_file)
     if not config:
-        logging.info('No config file found, will use defaults.')
+        logger.info('No config file found, will use defaults.')
 
     # Find all the Locust classes
     locusts = load_locust_dir(dir_path)
@@ -148,21 +147,20 @@ def collect_locusts(dir_path='locusts/', config_file='config.json'):
         try:
             weight = weights[key]
         except TypeError:
-            msg = """No weight given for {} Locust in config,
-                      using default from Locust.""".format(key)
+            msg = "No weight given for {} Locust in config, using default from Locust.".format(key)
             logger.info(msg)
             try:
                 weight = callee.weight
             except AttributeError:
-                msg = """No default weight given for {} TaskSet in TaskSet
-                         definition {}.weight, using 1.""".format(key, key)
+                msg = """No default weight given for {} TaskSet in TaskSet definition {}.weight, using 1.""".format(key, key)
                 logger.info(msg)
                 weight = 1
+        if weight is None:
+            weight = 1
         if weight:
             setattr(locusts[key], 'weight', weight)
             if weight > 0:
                 locust_classes.append(locusts[key])
-    locust_weights = [(key, callee.weight) for key, callee in locusts.items()]
-    logger.info(
-        "Found the following Locusts and weights: {}".format(locust_weights))
-    return locust_classes
+    locust_weights = [(callee, callee.weight) for callee in locust_classes]
+    logger.info("Found the following Locusts and weights: {}".format(locust_weights))
+    return locust_weights

@@ -97,7 +97,9 @@ def main(args=None):
         save_config(make_config(model_dir, include_tasksets), nest_opts.config_file)
 
     # Locust classes model_dir = nest_opts.model_dir
-    locust_classes = collect_locusts(model_dir)
+    print("Collecting Locust classes")
+    locusts = collect_locusts(model_dir)
+    locust_classes = [x[0] for x in locusts]
 
     # Tasksets
     if include_tasksets:
@@ -126,12 +128,14 @@ def main(args=None):
                 task_set = NestTaskSet
                 weight = 1
             locust_classes.append(NestLocust)
+            locusts.append((NestLocust,NestLocust.weight))
 
     _, locust_opts, locust_args = parse_options(nest_args)
     locust_opts.locust_classes = locust_classes
     if not locust_classes:
         print("No classes found for simulation, exiting.")
         sys.exit(1)
+    print("Running Locust with locust_classes: {}".format(locusts))
     run_locust(locust_opts, locust_args)
 
 
