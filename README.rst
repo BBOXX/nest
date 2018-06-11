@@ -4,22 +4,23 @@ locust-nest
 Locust wrapper. Import Locust classes from a folder and run Locust using those classes with weights determined in a config file,
 with an option to guide the generation of the config file.
 
-- locust-nest Documentation_
-- locust-nest Package_
-- locust-nest Source_
+- `locust-nest docs`_
+- `locust-nest pip package`_
+- `locust-nest source code`_
 
-Locust
------- 
+`Locust.io`_
+------------- 
 
-- Locust source code: Locust_
-- Locust website: locust.io_
+- `Locust docs`_
+- `Locust source code`_
 
-.. _Documentation: https://ps-george.github.io/locust-nest
-.. _Package: https://pypi.org/project/locust-nest/
-.. _Source: https://github.com/ps-george/locust-nest
+.. _`locust-nest docs`: https://ps-george.github.io/locust-nest
+.. _`locust-nest pip package`: https://pypi.org/project/locust-nest/
+.. _`locust-nest source code`: https://github.com/ps-george/locust-nest
 
-.. _Locust: https://github.com/locustio/locust
-.. _locust.io: https://locust.io
+.. _`Locust.io`: https://locust.io
+.. _`Locust docs`: https://docs.locust.io/en/stable/
+.. _`Locust source code`: https://github.com/locustio/locust
 
 Installation
 ============

@@ -8,14 +8,17 @@ class ExampleModel(TaskSet):
     username = None
     password = None
 
-
     def login(self, username, password, auth_endpoint):
+        if not auth_endpoint:
+            print("No Login required for this Locust")
+            return True
+            
         payload = {
             'userName': username,
             'password': password
         }
         headers = {'Content-Type': 'application/json'}
-        r = self.client.post(auth_endpoint, headers = headers, json = payload)
+        r = self.client.post(auth_endpoint, headers=headers, json=payload)
         if r.ok:
             jr = r.json()
             self.token = jr.get('token')
@@ -36,7 +39,7 @@ class ExampleModel(TaskSet):
         return self.login(self.username, self.password, self.auth_endpoint)
 
     def on_stop(self):
-        """Teardown: unclaim resources e.g. claimed user.
+        """Teardown: unclaim resources e.g. claimed user/resource.
 
         """
 

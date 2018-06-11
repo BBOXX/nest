@@ -1,7 +1,9 @@
-from configure import make_config, save_config, retry_valid_input
-from nest import collect_tasksets, collect_locusts
 from locust import TaskSet, HttpLocust, run_locust, parse_options
+from helpers import retry_valid_input
+from configure import make_config, save_config
+from nest import collect_tasksets, collect_locusts
 from version import __version__ as version
+from install import install
 import logging
 import sys
 import os
@@ -17,14 +19,14 @@ logger.addHandler(stream_handler)
 
 
 def create_parser():
-    """Create parser object used for defining all options for Locust.
+    """Create parser object used for defining all options for locust-nest.
 
     Returns:
-        OptionParser: OptionParser object used in *parse_options*.
+        ArgumentParser: ArgumentParser object used in *parse_options*.
     """
 
     # Initialize
-    parser = argparse.ArgumentParser(usage="nest [options] Locust options")
+    parser = argparse.ArgumentParser(usage="locust-nest [options] Locust options")
 
     parser.add_argument(
         '--configure',
@@ -51,7 +53,7 @@ def create_parser():
     )
 
     parser.add_argument(
-        '-d', '--model_dir',
+        '-d', '--model-dir',
         action='store',
         dest='model_dir',
         default=None,
@@ -79,6 +81,10 @@ def main(args=None):
 
     parser = create_parser()
     nest_opts, nest_args = parser.parse_known_args()
+    if nest_args:
+        if nest_args[0] == 'install':
+            install(nest_args[1:] if len(nest_args) > 1 else [])
+            sys.exit(0)
     include_tasksets = nest_opts.include_tasksets
 
     if nest_opts.show_version:
@@ -95,6 +101,16 @@ def main(args=None):
 
     if nest_opts.configure:
         save_config(make_config(model_dir, include_tasksets), nest_opts.config_file)
+        yeses = ['y', 'Y']
+        nos = ['n', 'N']
+        run = retry_valid_input(
+            prompt="Would you like to run locust-nest now?",
+            title='run',
+            default='n',
+            condition=lambda x: x in (yeses+nos)
+        )
+        if run not in yeses:
+            sys.exit(0)
 
     # Locust classes model_dir = nest_opts.model_dir
     print("Collecting Locust classes")
@@ -128,7 +144,7 @@ def main(args=None):
                 task_set = NestTaskSet
                 weight = 1
             locust_classes.append(NestLocust)
-            locusts.append((NestLocust,NestLocust.weight))
+            locusts.append([NestLocust, NestLocust.weight])
 
     _, locust_opts, locust_args = parse_options(nest_args)
     locust_opts.locust_classes = locust_classes

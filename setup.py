@@ -133,6 +133,7 @@ setup(
     # python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(exclude=('tests',)),
+    package_data={'locust_nest': ['example/*']},
     install_requires=REQUIRED,
     dependency_links=DEPENDENCY_LINKS,
     include_package_data=True,
