@@ -39,6 +39,18 @@ with an option to guide the generation of the config file.
 .. _`Locust docs`: https://docs.locust.io/en/stable/
 .. _`Locust source code`: https://github.com/locustio/locust
 
+What is locust-nest for?
+========================
+
+locust-nest is a wrapper around Locust to simplify load testing.
+
+Use locust-nest for *load generation*.
+
+Unit tests or live user testing will tell you if your system works for 1 user, locust-nest will show you if it can scale to 100, 1000 or 100,000 simultaneous users.
+
+It allows you to configure the weighting of each of your Locust classes so that you can run different load scenarios without changing any Python code.
+
+
 Installation
 ============
 
@@ -46,7 +58,15 @@ Installation
 
     pip install locust-nest
 
-Note: This package depends on a cutting edge version of locust that has not been merged into the master repo or released yet.
+The following will create an example file and script in the [example/] dir:
+
+.. code-block:: bash
+
+    locust-nest install [example/]
+
+Note: At the moment locust-nest uses pslocust_ to provide more current Locust features than the current Locust release.
+
+.. _pslocust: https://pypi.org/project/pslocust/
 
 Quick start
 ===========

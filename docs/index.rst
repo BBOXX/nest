@@ -42,6 +42,19 @@ with an option to guide the generation of the config file.
 .. _`Locust docs`: https://docs.locust.io/en/stable/
 .. _`Locust source code`: https://github.com/locustio/locust
 
+What is locust-nest for?
+========================
+
+locust-nest is a wrapper around Locust to simplify load testing.
+
+Use locust-nest for *load generation*.
+
+Unit tests or live user testing will tell you if your system works for 1 user, locust-nest will show you if it can scale to 100, 1000 or 100,000 simultaneous users.
+
+It allows you to configure the weighting of each of your Locust classes so that you can run different load scenarios without changing any Python code.
+
+It will search sub-directories for Locust classes, so your :code:`models/` directory could contain git submodules with a number of Locust models.
+
 Table of Contents
 =================
 
