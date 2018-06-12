@@ -7,4 +7,8 @@ Installation
 
     pip install locust-nest
 
-Note: This package depends on a cutting edge version of locust that has not been merged into the master repo or released yet.
+The following will create an example file and script in the [example/] dir:
+
+.. code-block:: bash
+
+    locust-nest install [example/]

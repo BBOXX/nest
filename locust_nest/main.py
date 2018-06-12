@@ -37,7 +37,7 @@ def create_parser():
     )
 
     parser.add_argument(
-        '--config_file',
+        '--config-file',
         action='store',
         dest='config_file',
         default='config.json',
@@ -71,7 +71,7 @@ def create_parser():
 
 
 def main(args=None):
-    """Load all TaskSets and Locusts from --model_dir according to --config_file.
+    """Load all TaskSets and Locusts from --model-dir according to --config-file.
     --configure option will guide generation of config file before launching.
     Will pass on all standard Locust arguments to run_locust.
 

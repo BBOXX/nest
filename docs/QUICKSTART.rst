@@ -54,23 +54,18 @@ which packages all the tasks with their desired weights into a `HTTPLocust` clas
 of those classes, with weights specified in a :code:`--config_file`.
 Note: Python 2 does not have support for recursive subdirectories, so at the moment only searches 1 directory deep :code:`{model_dir}/*/`
 
-configure flag
-----------------
-Ask user for each taskset the different weightings to use, and ask if you'd like to save these to a config file.
-
 Workflow
 ~~~~~~~~
 
-1. Nest will import all TaskSets from `models/` into one NestLocust, weighting according to :code:`--config_file`.
-2. Nest will find all Locust's, weighting according to :code:`--config_file`.
-3. Run any dependencies e.g. flask webserver for shared data between Locusts. (NOT IMPLEMENTED.)
-4. Display weightings that will be used with confirmation prompt (skippable with some commandline argument).
-5. Run Locust with weightings set from config for the Locusts and NestLocust classes
-6. Nest will have an option to automatically manage distributed resources for Locust master-slave mode. (NOT IMPLEMENTED)
+1. locust-nest will import all TaskSets from `models/` into one NestLocust, weighting according to :code:`--config_file`.
+2. locust-nest will find all Locust's, weighting according to :code:`--config_file`.
+3. Display weightings that will be used with confirmation prompt (skippable with some commandline argument).
+4. Run Locust with weightings set from config for the Locusts and NestLocust classes
+5. locust-nest will have an option to automatically manage distributed resources for Locust master-slave mode. (NOT IMPLEMENTED)
 
 Example TaskSet
 ~~~~~~~~~~~~~~~
 
-.. literalinclude:: ../models/example.py
+.. literalinclude:: ../locust_nest/example/example.py
   :language: python
   :linenos:
