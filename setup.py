@@ -29,7 +29,7 @@ DESCRIPTION = 'Auto-import and compilation of locust TaskSets.'
 URL = 'https://github.com/ps-george/locust-nest'
 EMAIL = 'puntersg@gmail.com'
 AUTHOR = 'George Punter'
-# REQUIRES_PYTHON = '>=3.6.0'
+REQUIRES_PYTHON = '>=2.7.0'
 VERSION = version
 
 
@@ -130,7 +130,7 @@ setup(
     long_description=long_description,
     author=AUTHOR,
     author_email=EMAIL,
-    # python_requires=REQUIRES_PYTHON,
+    python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(exclude=('tests',)),
     package_data={'locust_nest': ['example/*']},
@@ -143,6 +143,8 @@ setup(
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
