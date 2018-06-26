@@ -19,7 +19,7 @@ locust-nest
 
 .. |contributors| image:: https://img.shields.io/github/contributors/ps-george/locust-nest.svg
   :alt: GitHub contributors
-  :target: https://github.com/locustio/locust/graphs/contributors
+  :target: https://github.com/ps-george/locust-nest/graphs/contributors
 
 Locust wrapper. Import Locust classes from a folder and run Locust using those classes with weights determined in a config file,
 with an option to guide the generation of the config file.
