@@ -1,5 +1,4 @@
 doctrees
-*.json
 .vscode
 logs/
 *.db

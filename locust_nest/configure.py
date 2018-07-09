@@ -1,5 +1,5 @@
-from helpers import is_int, retry_valid_input
-from nest import load_taskset_dir, load_locust_dir
+from .helpers import is_int, retry_valid_input
+from .nest import load_taskset_dir, load_locust_dir
 import json
 import sys
 import os

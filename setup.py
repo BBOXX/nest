@@ -31,42 +31,7 @@ EMAIL = 'puntersg@gmail.com'
 AUTHOR = 'George Punter'
 REQUIRES_PYTHON = '>=2.7.0'
 VERSION = version
-
-
-def get_requirements(remove_links=True):
-    """
-    lists the requirements to install.
-    """
-    requirements = []
-    try:
-        with open('requirements.txt') as f:
-            requirements = f.read().splitlines()
-    except Exception as ex:
-        with open('DecoraterBotUtils.egg-info\requires.txt') as f:
-            requirements = f.read().splitlines()
-    if remove_links:
-        for requirement in requirements:
-            # git repository url.
-            if requirement.startswith("git:"):
-                requirements.remove(requirement)
-    return requirements
-
-# What packages are required for this module to be executed?
-REQUIRED = get_requirements()
-print("Requires:\n{}".format(REQUIRED))
-
-def get_links():
-    """
-    gets URL Dependency links.
-    """
-    links_list = get_requirements(remove_links=False)
-    for link in links_list:
-        # git repository url.
-        if not link.startswith("git:"):
-            links_list.remove(link)
-    return links_list
-
-DEPENDENCY_LINKS = get_links()
+REQUIRED = ['pslocust==0.9.3']
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -135,7 +100,7 @@ setup(
     packages=find_packages(exclude=('tests',)),
     package_data={'locust_nest': ['example/*']},
     install_requires=REQUIRED,
-    dependency_links=DEPENDENCY_LINKS,
+    # dependency_links=DEPENDENCY_LINKS,
     include_package_data=True,
     license='MIT',
     classifiers=[

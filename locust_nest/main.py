@@ -1,9 +1,9 @@
 from locust import TaskSet, HttpLocust, run_locust, parse_options
-from helpers import retry_valid_input
-from configure import make_config, save_config
-from nest import collect_tasksets, collect_locusts
-from version import __version__ as version
-from install import install
+from .helpers import retry_valid_input
+from .configure import make_config, save_config
+from .nest import collect_tasksets, collect_locusts
+from .version import __version__ as version
+from .install import install
 import logging
 import sys
 import os

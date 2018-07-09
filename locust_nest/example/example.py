@@ -59,3 +59,9 @@ class ExampleModel(TaskSet):
 class ExampleModelLocust(HttpLocust):
     host = "http://127.0.0.1:8089"
     task_set = ExampleModel
+
+
+class _PrivateExample(HttpLocust):
+    """Class starting with _ not included."""
+    host = "http://127.0.0.1:8089"
+    task_set = ExampleModel

@@ -44,10 +44,15 @@ def retry_valid_input(
         b -- Returns result of transform function (defaults to identity)
 
     """
+    # Fix Python 2.x.
+    global input
+    try: input = raw_input
+    except NameError: pass
+
     if default is not None:
         prompt += ' [{}] '.format(default)
     while True:
-        user_input = raw_input(prompt) or default
+        user_input = input(prompt) or default
         # If user_input passes the condition, transform and save the output
         if condition(user_input):
             break

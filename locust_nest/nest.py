@@ -20,6 +20,8 @@ def load_dir(dir_path, func, ignore_prefix='_'):
 
     Arguments:
         dir_path {string} -- path to the directory to import TaskSet classes.
+        func {function} -- returns a tuple of the ``__doc__`` attribute (a string) &
+                           dictionary of ``{'name': callable}`` of the classes.
         ignore_file_prefix {string} -- Ignore all files starting with prefix.
 
     Returns: dict -- {__doc__:class callable} for each *.py file in *dir_path*.
@@ -37,7 +39,7 @@ def load_dir(dir_path, func, ignore_prefix='_'):
         _, filename = os.path.split(filepath)
         if not filename.startswith(ignore_prefix):
             logger.info('Checking {}'.format(filepath))
-            _, t2 = func(filepath)
+            _, t2 = func(filepath, ignore_prefix = ignore_prefix)
             classes.update(t2)
     return classes
 
