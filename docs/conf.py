@@ -12,22 +12,34 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
+import ast
 import os
+import re
 import sys
-sys.path.insert(0, os.path.abspath('../'))
 
 from recommonmark.parser import CommonMarkParser
 
+sys.path.insert(0, os.path.abspath('../'))
+
 # -- Project information -----------------------------------------------------
 
-project = u'Nest'
+project = u'locust-nest'
 copyright = u'2018, George Punter'
 author = u'George Punter'
 
+_version_re = re.compile(r'__version__\s+=\s+(.*)')
+_init_file = os.path.join(
+        os.path.abspath('../'),
+        "locust_nest",
+        "version.py")
+with open(_init_file, 'rb') as f:
+    VERSION = str(ast.literal_eval(_version_re.search(
+        f.read().decode('utf-8')).group(1)))
 # The short X.Y version
-version = u''
+version = VERSION
 # The full version, including alpha/beta/rc tags
-release = u''
+release = '{}beta'.format(VERSION)
 
 
 # -- General configuration ---------------------------------------------------
@@ -41,10 +53,7 @@ release = u''
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
+    'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
 ]
@@ -52,13 +61,12 @@ extensions = [
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-source_parsers = {
-    '.md': CommonMarkParser
-}
+#source_parsers = {
+#}
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-source_suffix = ['.rst', '.md']
+source_suffix = ['.rst']
 
 # The master toctree document.
 master_doc = 'index'
@@ -111,7 +119,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Nestdoc'
+htmlhelp_basename = 'locust-nestdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -138,7 +146,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Nest.tex', u'Nest Documentation',
+    (master_doc, 'locust-nest.tex', u'locust-nest Documentation',
      u'George Punter', 'manual'),
 ]
 
@@ -148,7 +156,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'nest', u'Nest Documentation',
+    (master_doc, 'nest', u'locust-nest Documentation',
      [author], 1)
 ]
 
@@ -159,8 +167,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Nest', u'Nest Documentation',
-     author, 'Nest', 'One line description of project.',
+    (master_doc, 'locust-nest', u'locust-nest Documentation',
+     author, 'locust-nest', 'One line description of project.',
      'Miscellaneous'),
 ]
 
@@ -172,7 +180,8 @@ texinfo_documents = [
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-# on_rtd is whether we are on readthedocs.org, this line of code grabbed from docs.readthedocs.org
+# on_rtd is whether we are on readthedocs.org
+# this line of code grabbed from docs.readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 if not on_rtd:  # only import and set the theme if we're building docs locally

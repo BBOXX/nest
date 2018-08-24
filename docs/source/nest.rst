@@ -1,7 +1,7 @@
 nest.py
 =============
 
-.. automodule:: nest
+.. automodule:: locust_nest.nest
     :members:
     :undoc-members:
     :show-inheritance:

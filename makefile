@@ -1,4 +1,4 @@
-.PHONY: clean init
+.PHONY: clean init docs
 clean:
 	find . -name '*.pyc' -exec rm --force {} +
 	find . -name '*.pyo' -exec rm --force {} +
@@ -14,3 +14,5 @@ venv:
 	venv/bin/pip install --upgrade setuptools
 lint:
 	flake8 --exclude=.tox
+docs:
+	cd docs && make html
